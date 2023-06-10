@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 
 app = Flask(__name__, template_folder = "application/templates")
@@ -23,7 +23,10 @@ def news():
 @app.route('/your-url', methods =['GET', 'POST'])
 def your_url():
     if request.method == 'POST':
+        urls = {}
+        urls[request.form['code']]
         return render_template("your_url.html", code=request.form['code'])
     else:
-        return 'This is not valid!'
-        
+        return redirect('/')
+
+
