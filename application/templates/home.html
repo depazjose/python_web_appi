@@ -1,11 +1,15 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Url Shortener {% endblock %}
+{% block main %}
+
 <html>
     <head>
         <h1>
-            Home Page
+            URL Shortener
         </h1>
-        {% for message in get_flashed_messages() %}
-        <h2> {{ message}} </h2>
-        {% endfor %}
+
     </head>
     <body>
         <p>
@@ -34,5 +38,20 @@
             </br>
             <input type="submit" value="Shorten">
         </form>
+
+        {% if codes %}
+        <h2>Codes you have created:</h2>
+        <ul>
+            {% for code in codes %}
+            <a href="{{ url_for('redirect_to_url', code=code) }}">
+            <li>
+                {{ code }}
+            </li>
+        </a>
+            {% endfor %}
+        </ul>    
+        {% endif %}
     </body>
 </html>
+
+{% endblock %}

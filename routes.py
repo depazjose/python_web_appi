@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for, flash, abort
+from flask import Flask, render_template, request, redirect, url_for, flash, abort, session, jsonify
 import json
 import os.path
 from werkzeug.utils import secure_filename
@@ -10,7 +10,7 @@ app.secret_key = 'h1h2h3h4h5h6h7h8'
 
 @app.route('/')
 def home():
-    return render_template("home.html", today = datetime.now())
+    return render_template("home.html", codes = session.keys(), today = datetime.now())
 
 
 @app.route('/about')
@@ -46,6 +46,7 @@ def your_url():
 
         with open('urls.json', 'w') as url_file:
             json.dump(urls, url_file)
+            session[request.form['code']] = True
         return render_template("your_url.html", code=request.form['code'])
     else:
         return redirect('/')
@@ -67,3 +68,8 @@ def redirect_to_url(code):
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('page_not_found.html'), 404
+
+
+@app.route('/api')
+def session_api():
+    return jsonify(list(session.keys()))
